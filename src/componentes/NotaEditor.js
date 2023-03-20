@@ -26,6 +26,31 @@ export default function NotaEditor({mostraNotas}) {
     }
   }
 
+  //DESAFIO!
+  const umObjeto = {
+    id: "1",
+    titulo: "Um título",
+    texto: "Um texto qualquer"
+  }
+
+  async function salvaObj(){
+    const str = JSON.stringify(umObjeto)
+    const _id = geraId().toString()
+
+    const salvar = {
+      id: await _id,
+      texto: str
+    }
+
+    await AsyncStorage.setItem(salvar.id, salvar.texto)
+    console.log(await(getObj(_id)))
+  }
+
+  async function getObj(k){
+    const item = await AsyncStorage.getItem(k)
+    return JSON.parse(item)
+  }
+
   return(
     <>
       <Modal
@@ -62,6 +87,9 @@ export default function NotaEditor({mostraNotas}) {
       </Modal>
       <TouchableOpacity onPress={() => {setModalVisivel(true)}} style={estilos.adicionarMemo}>
         <Text style={estilos.adicionarMemoTexto}>+</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => {salvaObj()}} style={estilos.adicionarMemoOBJ}>
+        <Text style={estilos.adicionarMemoOBJTexto}>+JSON</Text>
       </TouchableOpacity>
     </>
   )
@@ -162,8 +190,33 @@ const estilos = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
   },
+  adicionarMemoOBJ: {
+    backgroundColor: "#54ba32",
+    justifyContent: "center",
+    height: 64,
+    width: 64,
+    margin: 16,
+    alignItems: "center",
+    borderRadius: 9999,
+    position: "absolute",
+    bottom: 74,
+    right: 0,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
   adicionarMemoTexto: {
     fontSize: 32,
+    lineHeight: 40,
+    color: "#FFFFFF",
+  },
+  adicionarMemoOBJTexto: {
+    fontSize: 14,
     lineHeight: 40,
     color: "#FFFFFF",
   }
