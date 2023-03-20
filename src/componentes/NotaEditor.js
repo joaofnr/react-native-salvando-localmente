@@ -9,11 +9,20 @@ export default function NotaEditor() {
 
   async function salvarNota() {
     const umaNota = {
-      id: "1",
+      id: await (await geraId()).toString(),
       texto
     }
     await AsyncStorage.setItem(umaNota.id, umaNota.texto)
-    mostrarNota()
+    console.log(umaNota)//mostrarNota()
+  }
+
+  async function geraId() {
+    const todasChaves = await AsyncStorage.getAllKeys()
+    if(todasChaves <=0){
+      return 1
+    } else {
+    return todasChaves.length + 1
+    }
   }
 
   async function mostrarNota() {
