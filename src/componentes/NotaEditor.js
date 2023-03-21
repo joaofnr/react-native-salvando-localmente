@@ -1,54 +1,21 @@
 import React, { useState } from "react"
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Picker } from "@react-native-picker/picker"
 
 export default function NotaEditor({mostraNotas}) {
 
+  const [titulo, setTitulo] = useState("")
+  const [categoria, setCategoria] = useState("Pessoal")
   const [texto, setTexto] = useState("")
   const [modalVisivel, setModalVisivel] = useState(false)
 
   async function salvarNota() {
     const umaNota = {
-      id: await (await geraId()).toString(),
+      id: "1",
       texto
     }
-    await AsyncStorage.setItem(umaNota.id, umaNota.texto)
     console.log(umaNota)
     mostraNotas()
-  }
-
-  async function geraId() {
-    const todasChaves = await AsyncStorage.getAllKeys()
-    if(todasChaves <=0){
-      return 1
-    } else {
-    return todasChaves.length + 1
-    }
-  }
-
-  //DESAFIO!
-  const umObjeto = {
-    id: "1",
-    titulo: "Um título",
-    texto: "Um texto qualquer"
-  }
-
-  async function salvaObj(){
-    const str = JSON.stringify(umObjeto)
-    const _id = geraId().toString()
-
-    const salvar = {
-      id: await _id,
-      texto: str
-    }
-
-    await AsyncStorage.setItem(salvar.id, salvar.texto)
-    console.log(await(getObj(_id)))
-  }
-
-  async function getObj(k){
-    const item = await AsyncStorage.getItem(k)
-    return JSON.parse(item)
   }
 
   return(
@@ -63,6 +30,24 @@ export default function NotaEditor({mostraNotas}) {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={estilos.modal}>
               <Text style={estilos.modalTitulo}>Criar nota</Text>
+              <Text style={estilos.modalSubTitulo}>Título da nota</Text>
+              <TextInput 
+                style={estilos.modalInput}
+                multiline={true}
+                numberOfLines={3}
+                onChangeText={novoTitulo => setTitulo(novoTitulo)}
+                placeholder="Digite o título lembrete"
+                value={titulo}/>              
+              <Text style={estilos.modalSubTitulo}>Categoria</Text>
+              <View style={estilos.modalPicker}>
+                <Picker 
+                  selectedValue={categoria}
+                  onValueChange={novaCategoria => setCategoria(novaCategoria)}>
+                    <Picker.Item label="Pessoal" value="Pessoal" />
+                    <Picker.Item label="Trabalho" value="Trabalho" />
+                    <Picker.Item label="Outros" value="Outros" />
+                  </Picker>
+              </View>
               <Text style={estilos.modalSubTitulo}>Conteúdo da nota</Text>
               <TextInput 
                 style={estilos.modalInput}
@@ -87,9 +72,6 @@ export default function NotaEditor({mostraNotas}) {
       </Modal>
       <TouchableOpacity onPress={() => {setModalVisivel(true)}} style={estilos.adicionarMemo}>
         <Text style={estilos.adicionarMemoTexto}>+</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => {salvaObj()}} style={estilos.adicionarMemoOBJ}>
-        <Text style={estilos.adicionarMemoOBJTexto}>+JSON</Text>
       </TouchableOpacity>
     </>
   )
@@ -189,34 +171,9 @@ const estilos = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
-  },
-  adicionarMemoOBJ: {
-    backgroundColor: "#54ba32",
-    justifyContent: "center",
-    height: 64,
-    width: 64,
-    margin: 16,
-    alignItems: "center",
-    borderRadius: 9999,
-    position: "absolute",
-    bottom: 74,
-    right: 0,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
-  },
+  },  
   adicionarMemoTexto: {
     fontSize: 32,
-    lineHeight: 40,
-    color: "#FFFFFF",
-  },
-  adicionarMemoOBJTexto: {
-    fontSize: 14,
     lineHeight: 40,
     color: "#FFFFFF",
   }
