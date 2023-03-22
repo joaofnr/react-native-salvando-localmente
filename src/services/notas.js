@@ -18,7 +18,6 @@ export function adicionaNota(nota) {
             '(titulo, categoria, texto) VALUES (?, ?, ?);',
             [nota.titulo, nota.categoria, nota.texto],
             () => {
-                
                 resolve('Nota adicionada com sucesso!')
             },
             (transaction, error) => {
@@ -42,6 +41,24 @@ export function buscaNotas() {
                 reject(error)
             })
         })
+    })
+}
+
+export function atualizaNota(nota) {
+    return new Promise((resolve, reject) => {
+        db.transaction((transaction) => {
+            transaction.executeSql('UPDATE Notas SET ' + 
+            'titulo=?, categoria=?, texto=? WHERE id=?;',
+            [nota.titulo, nota.categoria, nota.texto, nota.id],
+            () => {
+                resolve('Nota atualizada com sucesso!')
+            },
+            (transaction, error) => {
+                console.log(error)
+                reject(error)
+            })
+        })
+       
     })
 }
 

@@ -9,8 +9,10 @@ export default function App() {
     // removeTabela(),
     criaTabela()
     mostraNotas()
+    setNotaSelecionada({})
   },[])
   
+  const [notaSelecionada, setNotaSelecionada] = useState({})
   const [notas, setNotas] = useState([])
 
   async function mostraNotas() {
@@ -22,10 +24,13 @@ export default function App() {
     <SafeAreaView style={estilos.container}>
       <FlatList
         data={notas}
-        renderItem={(nota) => <Nota {...nota} />}
+        renderItem={(nota) => <Nota {...nota} setNotaSelecionada={setNotaSelecionada} />}
         keyExtractor={nota => nota.id}
       />
-      <NotaEditor mostraNotas={mostraNotas} />
+      <NotaEditor 
+        mostraNotas={mostraNotas} 
+        notaSelecionada={notaSelecionada}
+        setNotaSelecionada={setNotaSelecionada} />
       <StatusBar/>
     </SafeAreaView>
   )
