@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native"
 import { Picker } from "@react-native-picker/picker"
+import { adicionaNota } from "../services/notas"
 
 export default function NotaEditor({mostraNotas}) {
 
@@ -11,10 +12,12 @@ export default function NotaEditor({mostraNotas}) {
 
   async function salvarNota() {
     const umaNota = {
-      id: "1",
+      titulo,
+      categoria,
       texto
     }
-    console.log(umaNota)
+    await adicionaNota(umaNota)
+    setModalVisivel(false)
     mostraNotas()
   }
 
