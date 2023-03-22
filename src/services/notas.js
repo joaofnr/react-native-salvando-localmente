@@ -79,6 +79,22 @@ export function removeNota(nota) {
     })
 }
 
+export function buscaNotasCategoria(categoria) {
+    return new Promise((resolve, reject) => {
+        console.log('service', categoria)
+        db.transaction((transaction) => {
+            transaction.executeSql('SELECT * FROM Notas WHERE categoria=?;', [categoria], 
+            (transaction, resultado) => {
+                resolve(resultado.rows._array)
+            },
+            (transaction, error) => {
+                console.log(error)
+                reject(error)
+            })
+        })
+    })
+}
+
 export function removeTabela() {
     db.transaction((transaction) => {
         transaction.executeSql('DROP TABLE Notas;')
