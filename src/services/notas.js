@@ -62,6 +62,23 @@ export function atualizaNota(nota) {
     })
 }
 
+export function removeNota(nota) {
+    return new Promise((resolve, reject) => {
+        db.transaction((transaction) => {
+            transaction.executeSql('DELETE FROM Notas WHERE id=?;',
+            [nota.id],
+            () => {
+                resolve('Nota deletada com sucesso!')
+            },
+            (transaction, error) => {
+                console.log(error)
+                reject(error)
+            })
+        })
+       
+    })
+}
+
 export function removeTabela() {
     db.transaction((transaction) => {
         transaction.executeSql('DROP TABLE Notas;')
