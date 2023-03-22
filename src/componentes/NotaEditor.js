@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native"
 import { Picker } from "@react-native-picker/picker"
 import { adicionaNota, atualizaNota, removeNota } from "../services/notas"
+import Toast from 'react-native-root-toast';
 
 export default function NotaEditor({mostraNotas, notaSelecionada, setNotaSelecionada}) {
   useEffect(() => {
@@ -52,16 +53,23 @@ export default function NotaEditor({mostraNotas, notaSelecionada, setNotaSelecio
       texto,
       id: notaSelecionada.id
     }
-    await atualizaNota(umaNota)
+    const modifica = await atualizaNota(umaNota)
+    console.log(modifica)
     setModalVisivel(false)
     mostraNotas()
+    Toast.show(modifica, {
+      duration: Toast.durations.LONG
+    })
   }
   
   async function deletaNota() {
-    await removeNota(notaSelecionada)
+    const remove = await removeNota(notaSelecionada)
     limpaModal()
     setModalVisivel(false)
     mostraNotas()
+    Toast.show(remove, {
+      duration: Toast.durations.LONG
+    })
   }
 
   return(

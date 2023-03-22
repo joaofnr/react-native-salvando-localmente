@@ -4,6 +4,7 @@ import { Nota } from "./src/componentes/Nota"
 import { useEffect, useState } from "react"
 import { buscaNotas, criaTabela, removeTabela, buscaNotasCategoria } from "./src/services/notas"
 import { Picker } from "@react-native-picker/picker"
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 export default function App() {
   useEffect( () => {
@@ -34,27 +35,29 @@ export default function App() {
   }
   
   return (
-    <SafeAreaView style={estilos.container}>
-      <Text style={estilos.filterTitle}>Filtrar por categoria:</Text>
-      <Picker 
-        selectedValue={categoriaSelecionada}
-        onValueChange={ novaCategoria =>onPickerValueChange(novaCategoria)}>
-          <Picker.Item label="TODAS" value="" />
-          <Picker.Item label="Pessoal" value="Pessoal" />
-          <Picker.Item label="Trabalho" value="Trabalho" />
-          <Picker.Item label="Outros" value="Outros" />
-        </Picker>
-      <FlatList
-        data={notas}
-        renderItem={(nota) => <Nota {...nota} setNotaSelecionada={setNotaSelecionada} />}
-        keyExtractor={nota => nota.id}
-      />
-      <NotaEditor 
-        mostraNotas={mostraNotas} 
-        notaSelecionada={notaSelecionada}
-        setNotaSelecionada={setNotaSelecionada} />
-      <StatusBar/>
-    </SafeAreaView>
+    <RootSiblingParent>
+      <SafeAreaView style={estilos.container}>
+        <Text style={estilos.filterTitle}>Filtrar por categoria:</Text>
+        <Picker 
+          selectedValue={categoriaSelecionada}
+          onValueChange={ novaCategoria =>onPickerValueChange(novaCategoria)}>
+            <Picker.Item label="TODAS" value="" />
+            <Picker.Item label="Pessoal" value="Pessoal" />
+            <Picker.Item label="Trabalho" value="Trabalho" />
+            <Picker.Item label="Outros" value="Outros" />
+          </Picker>
+        <FlatList
+          data={notas}
+          renderItem={(nota) => <Nota {...nota} setNotaSelecionada={setNotaSelecionada} />}
+          keyExtractor={nota => nota.id}
+        />
+        <NotaEditor 
+          mostraNotas={mostraNotas} 
+          notaSelecionada={notaSelecionada}
+          setNotaSelecionada={setNotaSelecionada} />
+        <StatusBar/>
+      </SafeAreaView>
+    </RootSiblingParent>
   )
 }
 
